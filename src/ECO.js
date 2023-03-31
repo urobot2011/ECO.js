@@ -130,19 +130,41 @@ function ECOjs(chess = new Chess()){
         adds: function(obj){
             ECO.ECOs.push(...obj);
         },
-        pgns: function(){
-            return ECO.ECOs;
+        pgns: function(moveNumber = 'all'){
+            if(moveNumber == 'all') return ECO.ECOs;
+            var pgns = [];
+            for(var pgn of ECO.ECOs){
+                for(let i = 0; i < ECO.chess.history().length - moveNumber; i++){
+                    ECO.chess.undo();
+                }
+                pgns.push({name: pgn.name, pgn: ECO.chess.pgn()});
+            }
+            return pgns;
+        },
+        pgnMoves: function(moveNumber = 'all'){
+            if(moveNumber == 'all') return ECO.ECOs;
+            var pgns = [];
+            for(var pgn of ECO.ECOs){
+                for(let i = 0; i < ECO.chess.history().length - moveNumber; i++){
+                    ECO.chess.undo();
+                }
+                pgns.push({name: pgn.name, pgn: ECO.chess.pgn(), history: ECO.chess.history()});
+            }
+            return pgns;
         },
         fens: function(moveNumber = 'last'){
             var fens = [];
             for(var pgn of ECO.ECOs){
                 ECO.chess.load_pgn(pgn.pgn);
-                if(moveNumber = 'last') fens.push({name: pgn.name, fen: ECO.chess.fen()});
-                else {
+                if(moveNumber == 'last') {
+                    fens.push({name: pgn.name, fen: ECO.chess.fen(), pgn: pgn.pgn});
+                } else if(moveNumber == 'first'){
+                    fens.push({name: pgn.name, fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', pgn: pgn.pgn});
+                } else {
                     for(let i = 0; i < ECO.chess.history().length - moveNumber; i++){
                         ECO.chess.undo();
                     }
-                    fens.push({name: pgn.name, fen: ECO.chess.fen()});
+                    fens.push({name: pgn.name, fen: ECO.chess.fen(), pgn: pgn.pgn});
                 }
             }
             return fens;
@@ -155,6 +177,19 @@ function ECOjs(chess = new Chess()){
                 }
             }
             return ECOs;
+        },
+        engineOnly: {
+            currentlyAvailableOpening: function(game){
+                var ECOs = [];
+                var fens = ECO.fens(game.history().length == 0 ? 'first' : game.history().length);
+                fens.forEach(element => {
+                    if(element.fen == game.fen()){
+                        ECO.chess.load_pgn(element.pgn);
+                        ECOs.push({name: element.name, fen: element.fen, pgn: element.pgn, move: ECO.chess.history()[game.history().length]})
+                    }
+                });
+                return ECOs;
+            }
         }
     };
     return ECO;
