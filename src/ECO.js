@@ -1,4 +1,4 @@
-(function(){
+function ECOjs(chess){
     var ECOs = [
         {name: "C44 Scotch, Relfsson gambit ('MacLopez')", pgn: "1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Bb5"},
         {name: "C44 Scotch, Goering gambit", pgn: "1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. c3"},
@@ -121,29 +121,27 @@
         {name: "E20-E59 Nimzo-Indian defence", pgn: "1. d4 Nf6 2. c4 e6 3. Nc3 Bb4"},
         {name: "E60-E99 King's Indian defence", pgn: "1. d4 Nf6 2. c4 g6"}
     ];
-    class ECO{
-        constructor(chess){
-            this.ECOs = ECOs;
-            this.chess = chess;
-        }
-        add(obj){
+    this.ECOs = ECOs;
+    this.chess = chess;
+    var ECO = {
+        add: function(obj){
             this.ECOs.push(obj);
-        }
-        adds(obj){
+        },
+        adds: function(obj){
             this.ECOs.push(...obj);
-        }
-        pgns(){
+        },
+        pgns: function(){
             return this.ECOs;
-        }
-        fens(){
+        },
+        fens: function(){
             var fens = [];
             for(var pgn of this.ECOs){
                 this.chess.load_pgn(pgn.pgn);
                 fens.push({name: pgn.name, fen: this.chess.fen()});
             }
             return fens;
-        }
-        positionToECO(fen){
+        },
+        positionToECO: function(fen){
             var ECOs = [];
             for(var ECOfen of this.fens()){
                 if(ECOfen.fen == fen){
@@ -152,6 +150,6 @@
             }
             return ECOs;
         }
-    }
-    window["ECO"] = ECO;
-})();
+    };
+    return ECO;
+};
