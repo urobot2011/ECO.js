@@ -131,7 +131,7 @@ function ECOjs(chess){
             ECO.ECOs.push(...obj);
         },
         pgns: function(){
-            return this.ECOs;
+            return ECO.ECOs;
         },
         fens: function(){
             var fens = [];
