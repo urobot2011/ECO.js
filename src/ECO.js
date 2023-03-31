@@ -121,29 +121,29 @@ function ECOjs(chess){
         {name: "E20-E59 Nimzo-Indian defence", pgn: "1. d4 Nf6 2. c4 e6 3. Nc3 Bb4"},
         {name: "E60-E99 King's Indian defence", pgn: "1. d4 Nf6 2. c4 g6"}
     ];
-    this.ECOs = ECOs;
-    this.chess = chess;
     var ECO = {
+        ECOs: ECOs,
+        chess: chess,
         add: function(obj){
-            this.ECOs.push(obj);
+            ECO.ECOs.push(obj);
         },
         adds: function(obj){
-            this.ECOs.push(...obj);
+            ECO.ECOs.push(...obj);
         },
         pgns: function(){
             return this.ECOs;
         },
         fens: function(){
             var fens = [];
-            for(var pgn of this.ECOs){
-                this.chess.load_pgn(pgn.pgn);
-                fens.push({name: pgn.name, fen: this.chess.fen()});
+            for(var pgn of ECO.ECOs){
+                ECO.chess.load_pgn(pgn.pgn);
+                fens.push({name: pgn.name, fen: ECO.chess.fen()});
             }
             return fens;
         },
         positionToECO: function(fen){
             var ECOs = [];
-            for(var ECOfen of this.fens()){
+            for(var ECOfen of ECO.fens()){
                 if(ECOfen.fen == fen){
                     ECOs.push(ECOfen);
                 }
