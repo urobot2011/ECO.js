@@ -1,4 +1,4 @@
-function ECOjs(chess){
+function ECOjs(chess = new Chess()){
     var ECOs = [
         {name: "C44 Scotch, Relfsson gambit ('MacLopez')", pgn: "1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Bb5"},
         {name: "C44 Scotch, Goering gambit", pgn: "1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. c3"},
@@ -133,11 +133,17 @@ function ECOjs(chess){
         pgns: function(){
             return ECO.ECOs;
         },
-        fens: function(){
+        fens: function(moveNumber = 'last'){
             var fens = [];
             for(var pgn of ECO.ECOs){
                 ECO.chess.load_pgn(pgn.pgn);
-                fens.push({name: pgn.name, fen: ECO.chess.fen()});
+                if(moveNumber = 'last') fens.push({name: pgn.name, fen: ECO.chess.fen()});
+                else {
+                    for(let i = 0; i < ECO.chess.history().length - moveNumber; i++){
+                        ECO.chess.undo();
+                    }
+                    fens.push({name: pgn.name, fen: ECO.chess.fen()});
+                }
             }
             return fens;
         },
