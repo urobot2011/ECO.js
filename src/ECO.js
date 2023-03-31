@@ -161,7 +161,8 @@ function ECOjs(chess = new Chess()){
                 } else if(moveNumber == 'first'){
                     fens.push({name: pgn.name, fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', pgn: pgn.pgn});
                 } else {
-                    for(let i = 0; i < ECO.chess.history().length - moveNumber; i++){
+                    var len = ECO.chess.history().length - moveNumber;
+                    for(let i = 0; i < len; i++){
                         ECO.chess.undo();
                     }
                     fens.push({name: pgn.name, fen: ECO.chess.fen(), pgn: pgn.pgn});
