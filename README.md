@@ -7,6 +7,5 @@
   //here is your code
   var openings = ECO.engineOnly.currentlyAvailableOpening(game);
   game.move(openings[Math.floor(Math.random() * openings.length)].move);
-  board.position(game.fen());
 </script>
 ```
